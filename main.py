@@ -2,6 +2,12 @@ import pdfplumber
 from tkinter.filedialog import askopenfilename
 
 
+
+def count_pdf_pages(pdf_path):
+    with pdfplumber.open(pdf_path) as book:
+        page_count = len(book.pages)
+        return page_count
+
 # Extracts all text in a pdf file.
 def extract_pdf_text(pdf_path):
     with pdfplumber.open(pdf_path) as book:
@@ -61,19 +67,24 @@ def extract_pdf_lines_w_pl(pdf_path):
 
 
 if __name__ == "__main__":
-    what_to_do = input("AllText, TextP, PageText, Lines, LinesPL: ")
-    if what_to_do == "AllText":
-        # Example usage of extract_pdf_text
+    what_to_do = input("PageCount, AllText, TextP, PageText, Lines, LinesPL: ")
+    if what_to_do == "PageCount":
+        #Returns the number of pages in a pdf file.
+        pdf_path = askopenfilename()
+        page_count = count_pdf_pages(pdf_path)
+        print(page_count)
+    elif what_to_do == "AllText":
+        # Extracts all text in a pdf file.
         pdf_path = askopenfilename()
         text = extract_pdf_text(pdf_path)
         print(text)
     elif what_to_do == "TextP":
-        # Example usage of extract_pdf_text
+        # Extracts all text in a pdf file and returns it with page numbers.
         pdf_path = askopenfilename()
         text = extract_pdf_text_w_p(pdf_path)
         print(text)
     elif what_to_do == "PageText":
-        # Example usage of extract_page_text
+        # Extracts the text for a specific page, and returns an error if page is out of bounds.
         pdf_path = askopenfilename()
         try:
             page_number = int(input("Page Number: "))  # Replace with the desired page number
@@ -82,13 +93,13 @@ if __name__ == "__main__":
         except ValueError as e:
             print(e)
     elif what_to_do == "Lines":
-        # Example usage of extract_pdf_lines
+        # Extracts all text (line by line) in a pdf file.
         pdf_path = askopenfilename()
         lines = extract_pdf_lines(pdf_path)
         for line in lines:
             print(line['text'])
     elif what_to_do == "LinesPL":
-        # Example usage of extract_pdf_lines
+        # Extracts all text (line by line) in a pdf file and returns them with page & line numbers.
         pdf_path = askopenfilename()
         lines = extract_pdf_lines_w_pl(pdf_path)
         for line in lines:
